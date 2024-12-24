@@ -1,26 +1,21 @@
-resource "aws_eip" "vero" {
-  instance = "vero"
-  vpc      = true
-}
-
-resource "aws_instance" "vero" {
-  ami                         = "ami-0742b4e673072066f"
-  instance_type               = var.instance_type
-  associate_public_ip_address = true
-  #vpc_security_group_ids      = [aws_security_group.restorepoint.id]
-  key_name                    = "CLassServer"
-
-  root_block_device {
-    volume_type           = var.instance_storage_type
-    volume_size           = var.instance_storage
-    delete_on_termination = true
-    encrypted             = true
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "3.46.0"
+    }
   }
 }
- 
-resource "aws_volume_attachment" "vero" {
-  device_name  = "/dev/sdb"
-  volume_id    = "vol-0a226c2f96389864a"
-  instance_id  = "ami-0742b4e673072066f"
-  force_detach = true
+
+provider "aws" {
+  region = "us-east-1"
+  access_key = "AKIA6G75D7U7K2L6BQRB"
+  secret_key = "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"
+}
+
+resource "aws_instance" "devclass1" {
+  ami           = "ami-0166fe664262f664c"
+  instance_type = "t2.micro"
+  key_name = "vero2key"
+  security_groups = ["default", "sg-0f1b3cc3be13d543a"]
 }
